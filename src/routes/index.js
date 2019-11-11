@@ -3,6 +3,7 @@ const path = require("path");
 const ProductService = require("../services");
 const passport = require("passport");
 const receipt = "../assets/receipt.pdf";
+const scopesValidationHandler = require('../utils/middleware/scopesValidationHandler');
 
 require('../utils/auth/strategies/jwt');
 
@@ -35,6 +36,7 @@ const platziStore = app => {
   router.put(
     "/products/:id",
     passport.authenticate("jwt", { session: false }),
+    scopesValidationHandler(['update:products']),
     async (req, res, next) => {
       const { id } = req.params;
       const { body: product } = req;
@@ -52,11 +54,10 @@ const platziStore = app => {
   router.delete(
     "/products/:id",
     passport.authenticate("jwt", { session: false }),
+    scopesValidationHandler(['delete:products']),
     async (req, res, next) => {
       const { id } = req.params;
-      
-      console.log(id);
-      
+          
       const storeProducts = await productService.deleteProductById(id);
       res.status(200).json(storeProducts);
     }

@@ -36,8 +36,6 @@ class ProductService {
   async deleteProductById(id) {
     try {
       const deletedProductId = await this.mongodb.delete(this.collection, id);
-
-      console.log('id eliminado:', id);
       
       return deletedProductId;
     } catch (error) {
