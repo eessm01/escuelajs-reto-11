@@ -2,13 +2,18 @@ const express = require('express');
 const app = express();
 
 const { config } = require('./config');
-const platziStore = require('./routes')
+const platziStore = require('./routes/index');
+const authApi = require('./routes/auth');
+
+// middleware body parser
+app.use(express.json());
 
 app.get('/', (req, res) => {
   let userInfo = req.header("user-agent");
   res.send(`UserInfo: ${userInfo}`);
 });
 
+authApi(app);
 platziStore(app);
 
 app.listen(config.port, err => {
